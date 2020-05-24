@@ -1,16 +1,35 @@
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+import sys
 import time
-
 # CHROME BOT
+def newchat(ch_user):
+    new=chrome_browser.find_element_by_xpath('//div[@class="gQzdc"]')
+    new.click()
+    user = chrome_browser.find_element_by_xpath('//div[@class="_2S1VP copyable-text selectable-text"]')
+    user.send_keys(ch_user)
+    time.sleep(2)
+    try:
+        chrome_user=chrome_browser.find_element_by_xpath('//span[@title="{}"]'.format(ch_user))
+        chrome_user.click()
+    except NoSuchElementException:
+        print('"{}" not found in contacts'.format(ch_user))
+    except Exception as e:
+        chrome_browser.close()
+        print(e)
+        sys.exit()
 chrome_browser=webdriver.Chrome(executable_path='/Users/jamaltariqcheema/Downloads/chromedriver')
 chrome_browser.get('https://web.whatsapp.com/')
 print('Waiting...')
 time.sleep(15)
 try:
-    ch_users=['Test1','Test2']
+    ch_users=['Test']
     for ch_user in ch_users:
-        chrome_user=chrome_browser.find_element_by_xpath('//span[@title="{}"]'.format(ch_user))
-        chrome_user.click()
+        try:
+            chrome_user=chrome_browser.find_element_by_xpath('//span[@title="{}"]'.format(ch_user))
+            chrome_user.click()
+        except NoSuchElementException:
+            newchat(ch_user)
         chrome_text=chrome_browser.find_element_by_xpath('//div[@class="_1Plpp"]')
         chrome_text.send_keys('Bot checking...')
         chrome_send=chrome_browser.find_element_by_xpath('//button[@class="_35EW6"]')
