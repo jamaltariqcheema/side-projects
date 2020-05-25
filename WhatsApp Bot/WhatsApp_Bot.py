@@ -3,7 +3,7 @@ from selenium.common.exceptions import NoSuchElementException
 import sys
 import time
 # CHROME BOT
-def newchat(ch_user):
+def newchatchrome(ch_user):
     new=chrome_browser.find_element_by_xpath('//div[@class="gQzdc"]')
     new.click()
     user = chrome_browser.find_element_by_xpath('//div[@class="_2S1VP copyable-text selectable-text"]')
@@ -29,7 +29,7 @@ try:
             chrome_user=chrome_browser.find_element_by_xpath('//span[@title="{}"]'.format(ch_user))
             chrome_user.click()
         except NoSuchElementException:
-            newchat(ch_user)
+            newchatchrome(ch_user)
         chrome_text=chrome_browser.find_element_by_xpath('//div[@class="_1Plpp"]')
         chrome_text.send_keys('Bot checking...')
         chrome_send=chrome_browser.find_element_by_xpath('//button[@class="_35EW6"]')
@@ -38,18 +38,36 @@ except:
     print('Run, Aliens Invaded the Browser')
 
 # SAFARI BOT
+def newchatsafari(sf_user):
+    new=safari.find_element_by_xpath('//div[@class="gQzdc"]')
+    new.click()
+    user = safari.find_element_by_xpath('//div[@class="_2S1VP copyable-text selectable-text"]')
+    user.send_keys(sf_user)
+    time.sleep(2)
+    try:
+        safarir=safari.find_element_by_xpath('//span[@title="{}"]'.format(sf_user))
+        safari.click()
+    except NoSuchElementException:
+        print('"{}" not found in contacts'.format(sf_user))
+    except Exception as e:
+        safari.close()
+        print(e)
+        sys.exit()
 safari=webdriver.Safari(executable_path='/usr/bin/safaridriver')
 safari.get('https://web.whatsapp.com')
 print('Waiting...')
 time.sleep(15)
 try:
-    safari_user = safari.find_element_by_xpath('//span[@title="Test"]')
-    safari_user.click()
-    for i in range(0, 10):
+    sf_users=['Test']
+    for sf_user in sf_users:
+        try:
+            safari_user = safari.find_element_by_xpath('//span[@title="{}"]'.format(sf_user))
+            safari_user.click()
+        except NoSuchElementException:
+            newchatsafari(sf_user)
         safari_text = safari.find_element_by_xpath('//div[@class="_1Plpp"]')
-        safari_text.send_keys('SPAMMING After Every 5 Seconds')
+        safari_text.send_keys('SPAMMING...')
         safari_send = safari.find_element_by_xpath('//button[@class="_35EW6"]')
         safari_send.click()
-        time.sleep(5)
 except:
     print('Run, Aliens Invaded the Browser')
